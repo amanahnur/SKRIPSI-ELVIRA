@@ -1,0 +1,19 @@
+h1.jartikel {
+    text-align: center;
+    position: relative;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    z-index: 1;
+  }
+  
+  p.dartikel {
+    text-align: justify;
+    font-size: 18px;
+    line-height: 1.5;
+    color: #333;
+    margin-bottom: 50px;
+    margin-left: 100px;
+    margin-right: 100px;
+  }
