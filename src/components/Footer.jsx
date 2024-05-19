@@ -8,10 +8,10 @@ const Footer = () => {
       <Row className="d-flex justify-content-between">
         <Col>
           <h3 className="fw-bold">Elvira</h3>
-          <p className="desc mt-4">ElVira adalah singkatan dari Elektronik Environment New Era, 
-            sebuah platfrom pengaduan tindak pelanggaran lingkungan yang terjadi 
-            disekitar kamu, platform ini memudahkan dinas lingkungan hidup 
-            dalam menangani permasalahan yang terjadi di wilayah kamu</p>
+          <p className="desc mt-4">Elvira adalah singkatan dari Elektronik Environment New Era yang 
+            merupakan platfrom pengaduan tindak pelanggaran lingkungan yang terjadi 
+            disekitar anda. Platform ini memudahkan dinas lingkungan hidup 
+            dalam menangani permasalahan yang terjadi di wilayah anda.</p>
             <div className="no mb-1 mt-4">
               <Link className="text-decoration-none">
                 <i className="fa-brands fa-whatsapp"></i>
@@ -21,7 +21,7 @@ const Footer = () => {
             <div className="email">
               <Link className="text-decoration-none">
                 <i className="fa-regular fa-envelope"></i>
-                <p className="m-0">Elvira01@gmail.com</p>
+                <p className="m-0">Elvira@gmail.com</p>
               </Link>
             </div>
         </Col>

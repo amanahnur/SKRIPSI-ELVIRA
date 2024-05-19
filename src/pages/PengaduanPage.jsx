@@ -3,58 +3,74 @@ import { Container, Row, Col } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
+import { Alert } from 'react-bootstrap';
 
 const PengaduanPage = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [isFormEmpty, setIsFormEmpty] = useState(true);
+  const [showAlert, setShowAlert] = useState(false); // Gunakan useState untuk mengatur status alert
+  const [message, setMessage] = useState('');
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    // nilai input dari formulir
-    const email = event.target.elements.email.value;
-    const nama = event.target.elements.nama.value;
-    const telepon = event.target.elements.telepon.value;
-    const lokasi = event.target.elements.lokasi.value;
-    const keluhan = event.target.elements.keluhan.value;
-
-    // Cek apakah ada bidang yang kosong
-    if (!email || !nama || !telepon || !lokasi || !keluhan) {
-      alert("Mohon Lengkapi Data Pengaduan");
-      return;
-    }
-
-    // objek data yang akan dikirimkan
-    const data = {
-      email,
-      nama,
-      telepon,
-      lokasi,
-      keluhan,
-    };
-
-    // Kirim permintaan ke MockAPI menggunakan axios
-    axios
-      .post("https://64507b91a3221969114b394b.mockapi.io/Pengaduan", data)
-      .then((response) => {
-        // Tampilkan pesan sukses
-        setShowSuccessMessage(true);
-
-        // Setelah beberapa saat, atur ulang pesan sukses menjadi tidak terlihat dan hapus nilai input
-        setTimeout(() => {
-          setShowSuccessMessage(false);
-          event.target.reset();
-          setIsFormEmpty(true);
-        }, 3000);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+  const [formData, setFormData] = useState({
+    nama: '',
+    email: '',
+    telepon: '',
+    lokasi: '',
+    keluhan: '',
+    gambar: null
+  });
 
   const handleInputChange = (event) => {
     const { value } = event.target;
     setIsFormEmpty(value.trim() === "" || !value);
+  };
+
+  const handleImageChange = (e) => {
+    setFormData({
+      ...formData,
+      gambar: e.target.files[0]
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append('nama', formData.nama);
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('telepon', formData.telepon);
+      formDataToSend.append('lokasi', formData.lokasi);
+      formDataToSend.append('keluhan', formData.keluhan);
+      formDataToSend.append('gambar', formData.gambar);
+  
+      const res = await axios.post(
+        'https://elvirabe-production.up.railway.app/pengaduan',
+        formDataToSend,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
+  
+      if (res.data.status) {
+        setShowAlert(true);
+        setMessage(res.data.message);
+        setTimeout(() => {
+          setShowAlert(false);
+          setMessage('');
+        }, 2000);
+      } else {
+        setShowAlert(true);
+        setMessage(res.data.message);
+        setTimeout(() => {
+          setShowAlert(false);
+          setMessage('');
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -76,6 +92,7 @@ const PengaduanPage = () => {
             <div className="pengaduan-box">
               <div className="form-container">
                 <Form onSubmit={handleSubmit}>
+                {showAlert && <Alert variant="success">{message}</Alert>}{' '}
                   <h2>Adukan Keluhanmu</h2>
                   <Form.Group className="mb-3" controlId="email">
                     <Form.Label>Email : </Form.Label>
@@ -103,7 +120,7 @@ const PengaduanPage = () => {
                   </Form.Group>
                   <Form.Group controlId="formFile" className="mb-3">
                     <Form.Label>Upload Gambar : </Form.Label>
-                    <Form.Control type="file" />
+                    <Form.Control type="file" onChange={handleImageChange}/>
                   </Form.Group>
                   <Button
                     variant="primary"

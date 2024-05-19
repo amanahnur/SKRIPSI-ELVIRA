@@ -28,9 +28,9 @@ const Navbars = () => {
               })}
             </Nav>
 
-            <div className='text-center'>
-              <button className='btn rounded-10' style={{ backgroundColor: '#ededed', color: '#144458' }} onClick={() => navigate("/Login")}>Login</button>
-            </div>
+            {/* <div className='text-center'>
+              <button className='btn rounded-10' style={{ backgroundColor: '#ededed', color: '#144458' }} onClick={() => navigate("/Login")}>Login Admin</button>
+            </div> */}
             {/* className="btn btn-lg rounded-1 me-2"
             style={{ backgroundColor: '#144458', color: '#ffff' }} */}
           </Navbar.Collapse>
