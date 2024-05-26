@@ -1,32 +1,26 @@
-import { Container, Row, Col } from "react-bootstrap";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import Artikel1 from "../assets/img/artikel/edukasi-1.jpg";
-import Artikel2 from "../assets/img/artikel/edukasi2.jpg";
-import Artikel3 from "../assets/img/artikel/edukasi3.jpg";
-import Artikel4 from "../assets/img/artikel/edukasi4.jpg";
-import Artikel5 from "../assets/img/artikel/edukasi5.jpg";
-import Artikel6 from "../assets/img/artikel/edukasi6.jpg";
-import Artikel7 from "../assets/img/artikel/edukasi7.jpg";
-import Artikel9 from "../assets/img/artikel/edukasi9(1).jpeg";
-import Artikel10 from "../assets/img/artikel/edukasi8(1).jpeg";
+import { Container, Row, Col } from 'react-bootstrap';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const ArtikelPage = () => {
   const [articles, setArticles] = useState([]);
+  const [search, setSearch] = useState('');
   const navigate = useNavigate();
+
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     // Fetch articles from the API endpoint
     axios
-      .get("https://64507b91a3221969114b394b.mockapi.io/Artikel")
+      .get(`${apiUrl}/artikel?search=${search}&limit=1000`)
       .then((response) => {
-        setArticles(response.data);
+        setArticles(response.data.data); // Accessing the `data` property from the response
       })
       .catch((error) => {
-        console.error("Error fetching articles:", error);
+        console.error('Error fetching articles:', error);
       });
-  }, []);
+  }, [search]); // Trigger the effect when `search` changes
 
   const handleDetailClick = (articleId) => {
     // Redirect to the DetailArtikel page with the selected article ID
@@ -48,10 +42,23 @@ const ArtikelPage = () => {
             </Col>
           </Row>
 
+          <Row>
+            <Col>
+              <div className="search-box">
+                <input
+                  type="text"
+                  placeholder="Cari artikel..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+            </Col>
+          </Row>
+
           <div className="box-artikel">
             {articles.map((article) => (
               <div className="box" key={article.id}>
-                <img src={article.gambar} alt={article.title} />
+                <img src={article.gambar} alt={article.judul} />
                 <h3>{article.judul}</h3>
                 <button onClick={() => handleDetailClick(article.id)}>
                   Detail
@@ -59,7 +66,6 @@ const ArtikelPage = () => {
               </div>
             ))}
           </div>
-
         </Container>
       </div>
     </div>
